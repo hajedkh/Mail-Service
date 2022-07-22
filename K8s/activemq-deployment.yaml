@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: keda
+  creationTimestamp: null
+  labels:
+    app: activemq
+  name: activemq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: activemq
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: activemq
+    spec:
+      containers:
+      - image: activemq2
+        imagePullPolicy: Never
+        name: activemq
+        resources: {}
+status: {}

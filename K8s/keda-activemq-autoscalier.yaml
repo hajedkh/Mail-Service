@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: keda
+  name: activemq-secret
+type: Opaque
+data:
+  activemq-password: YWRtaW4=
+  activemq-username: YWRtaW4=
+---
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  namespace: keda
+  name: trigger-auth-activemq
+spec:
+  secretTargetRef:
+    - parameter: username
+      name: activemq-secret
+      key: activemq-username
+    - parameter: password
+      name: activemq-secret
+      key: activemq-password
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  namespace: keda
+  name: activemq-scaledobject
+spec:
+  scaleTargetRef:
+    name: mail
+  minReplicaCount: 0
+  triggers:
+    - type: activemq
+      metadata:
+        managementEndpoint: "activemq-management-service:81"
+        destinationName: "SendMailQueue"
+        brokerName: "localhost"
+        targetQueueSize: "10"
+      authenticationRef:
+        name: trigger-auth-activemq

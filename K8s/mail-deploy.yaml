@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: keda
+  creationTimestamp: null
+  labels:
+    app: mail
+  name: mail
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mail
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mail
+    spec:
+      containers:
+      - image: mail
+        imagePullPolicy: Never
+        name: mail
+        resources: {}
+status: {}
